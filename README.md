@@ -8,7 +8,7 @@ The main technologies used were the Laravel Framework and Vue.js.
 
 The WebApp is divided into 2 parts:
 
-- Backoffice -> Accessible by the Admin and where he can control de App. It has a complete CRUD for books, authors, activities, images, etc. The front-end of the backoffice was made using Laravel Blade Templates and Bootstrap.
+- Backoffice -> Accessible by the Admin and where he can control de App. It has a complete CRUD for books, authors, activities, images, etc. The front-end of the backoffice was made using Laravel Blade and Bootstrap.
 - Frontoffice -> Accessible by all and where the books can be read/heard. The User also has access to an editable profile page. This is a SPA made with Vue.js that consumes our Laravel API. Original CSS. 
 ## Deployment
 
@@ -33,7 +33,7 @@ To deploy this project run:
 
 All the developers worked on the project as a whole, especially the back-end. The database was co-designed.
 
-- [@António 'Tojal' Rocha](https://www.github.com/T0jal) - Focused on the CRUD for the backoffice and the front-end of the backoffice, implementing the whole visual layer for the Admin.  
+- [@António 'Tojal' Rocha](https://www.github.com/T0jal) - Focused on the CRUD for the backoffice and the front-end of the backoffice, implementing the whole visual layer for the Admin using Laravel Blade.  
 - [@Emanuel Teixeira](https://www.github.com/manecz) - Focused on the front-end of the frontoffice creating it from scratch using Vue.js. Also improved the CRUD API as needed. Implemented Axios, VueX and JWT.
 - João Carvalhinho - Focused on the overall back-end. Worked on the Models, CRUD, implemented the DB and Authentication, created a Tag System.
 
