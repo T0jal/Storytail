@@ -83,10 +83,11 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <br>
+                                </div>
+                            </div>
+                            <br>
                             <div class="d-flex justify-content-center">
-                                <button type="submit" class="btn btn-success" style="width:100px">Save</button>
+                                <button type="submit" class="btn btn-success" style="width:100px">Create</button>
                                 <a href="{{url('admin/activities/')}}" type="button" class="btn btn-danger" style="width:100px">Return</a>
                             </div>
                         </form>

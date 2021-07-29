@@ -71,17 +71,19 @@
                                         <div class="col-sm-7">
                                             <div class="form-group">
                                                 <input
+                                                    required
                                                     type="text"
                                                     id="read_time"
                                                     name="read_time"
                                                     autocomplete="read_time"
                                                     placeholder="Estimated reading time in minutes"
+                                                    class="form-control @error('read_time') is-invalid @enderror"
                                                     value="{{ old('read_time') }}"
-                                                    required
-                                                    aria-describedby="nameHelp"
-                                                    class="form-control @error('read_time') is-invalid @enderror">
+                                                    aria-describedby="nameHelp">
                                                 @error('read_time')
-                                                    <div class="alert alert-danger"> {{ $message }} </div>
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
                                                 @enderror
                                             </div>
                                         </div>
@@ -158,7 +160,7 @@
                                                         Premium
                                                     </option>
                                                 </select>
-                                                @error('$book->access_level')
+                                                @error('access_level')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>
@@ -273,7 +275,7 @@
                                                         autocomplete="cover_url"
                                                         placeholder="Book's cover_url"
                                                         value="{{ old('cover_url') }}"
-                                                        required
+{{--                                                        required--}}
                                                         aria-describedby="nameHelp">
                                                 </div>
                                             </div>
@@ -297,7 +299,7 @@
                                                         autocomplete="page_image_url"
                                                         placeholder="Book's pages"
                                                         value="{{ old('page_image_url') }}"
-                                                        required
+{{--                                                        required--}}
                                                         aria-describedby="nameHelp">
                                                 </div>
                                             </div>
@@ -342,7 +344,7 @@
                                                     placeholder="User ID"
                                                     class="form-control
                                                     @error('user_id') is-invalid @enderror"
-                                                    value="1"
+                                                    value="{{Auth::id()}}"
                                                     required
                                                     aria-describedby="nameHelp">
                                                 @error('user_id')
@@ -357,7 +359,7 @@
                             </div>
                             <br>
                             <div class="d-flex justify-content-center">
-                                <button type="submit" class="btn btn-success" style="width:100px">Save</button>
+                                <button id="createButton" type="submit" class="btn btn-success" style="width:100px">Create</button>
                                 <a href="{{url('admin/books/')}}" type="button" class="btn btn-danger" style="width:100px">Return</a>
                             </div>
                         </form>
@@ -369,6 +371,17 @@
 @endsection
 @section('scripts')
     <script>
+
+        //Check read_time type
+
+        document.getElementById('createButton').onclick = function(e){
+            let readTimeInput = parseInt(document.getElementById('read_time').value);
+
+            if (!Number.isInteger(readTimeInput))
+            {   event.preventDefault();
+                alert("The value inserted as Read Time has to be a whole number.")
+            }
+        }
 
         //Reload Authors
         document.getElementById('reloadAuthors').onclick = function(e){
@@ -409,7 +422,6 @@
             onaddfilestart: (file) => { isLoadingCheckCover(); },
             onprocessfile: (files) => { isLoadingCheckCover(); }
         });
-
         pondCover.setOptions({
             allowMultiple: false,
             instantUpload: false,
@@ -425,11 +437,9 @@
                 }
             }
         });
-
         document.getElementById('uploadCover').onclick = function(e){
             pondCover.processFiles();
         }
-
         function isLoadingCheckCover(){
             let isLoading = pondCover.getFiles().filter(x=>x.status !== 5).length !== 0;
             if(isLoading) {
@@ -453,6 +463,7 @@
             instantUpload:  false,
             allowReorder:   true,
             allowFileSizeValidation: true,
+            allowProcess: false,
             maxFileSize: '5MB',
             labelMaxFileSizeExceeded:'The file you are trying to upload is too big.',
             labelMaxFileSize: 'Maximum file size is {filesize}',
@@ -486,11 +497,22 @@
             onprocessfile: (files) => { isLoadingCheckAudio(); }
         });
 
+
+        function isLoadingCheckAudio(){
+            let isLoading = pondAudio.getFiles().filter(x=>x.status !== 5).length !== 0;
+            if(isLoading) {
+                $('#createBook [type="submit"]').attr("disabled", "disabled");
+            } else {
+                $('#createBook [type="submit"]').removeAttr("disabled");
+            }
+        }
+
         pondAudio.setOptions({
             allowMultiple:  true,
             instantUpload:  false,
             allowReorder:   true,
             allowFileSizeValidation: true,
+            allowProcess: false,
             maxFileSize: '10MB',
             labelMaxFileSizeExceeded:'The file you are trying to upload is too big.',
             labelMaxFileSize: 'Maximum file size is {filesize}',
@@ -503,15 +525,19 @@
         });
 
         document.getElementById('uploadAllAudio').onclick = function(e){
-            pondAudio.processFiles();
+            if(validateSize())
+            {
+                pondAudio.processFiles();
+            }
+            else
+                alert("The number of audio files does not match the number of pages.")
         }
 
-        function isLoadingCheckAudio(){
-            let isLoading = pondAudio.getFiles().filter(x=>x.status !== 5).length !== 0;
-            if(isLoading) {
-                $('#createBook [type="submit"]').attr("disabled", "disabled");
+        function validateSize(){
+            if(pondAudio.getFiles().length === 0 || pondAudio.getFiles().length === pondPages.getFiles().length){
+                return true;
             } else {
-                $('#createBook [type="submit"]').removeAttr("disabled");
+                return false;
             }
         }
 

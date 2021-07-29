@@ -23,7 +23,7 @@
                                                     id="first_name"
                                                     name="first_name"
                                                     autocomplete="first_name"
-                                                    placeholder="First Name"
+                                                    placeholder="Authors' First Name"
                                                     class="form-control @error('title') is-invalid @enderror"
                                                     required
                                                     aria-describedby="nameHelp">
@@ -45,7 +45,7 @@
                                                     id="last_name"
                                                     name="last_name"
                                                     autocomplete="last_name"
-                                                    placeholder="Last Name"
+                                                    placeholder="Authors' Last Name"
                                                     class="form-control  @error('title') is-invalid @enderror"
                                                     required
                                                     aria-describedby="nameHelp">
@@ -83,7 +83,7 @@
                                     </div>
 
                                     <div class="row">
-                                        <label class="col-sm-2 col-form-label">{{ __('Nationality') }}</label>
+                                        <label class="col-sm-2 col-form-label">{{ __('Country of Origin') }}</label>
                                         <div class="col-sm-7">
                                             <div class="form-group">
                                             <input
@@ -91,7 +91,7 @@
                                                 id="nationality"
                                                 name="nationality"
                                                 autocomplete="nationality"
-                                                placeholder="Country of origin"
+                                                placeholder="Exe: Nicaragua, Djibouti, Burkina Faso, Tajikistan,..."
                                                 class="form-control
                                                 @error('read time') is-invalid @enderror"
                                                 required
@@ -110,7 +110,8 @@
                                         <label class="col-sm-2 col-form-label">{{ __('Author Photo') }}</label>
                                         <div class="col-sm-7">
                                             <div class="form-group">
-                                                <label for="author_photo_url"></label>
+                                                <div>
+                                                    <label for="author_photo_url"></label>
                                                     <input
                                                         type="file"
                                                         id="author_photo_url"
@@ -118,17 +119,21 @@
                                                         autocomplete="author_photo_url"
                                                         placeholder="Author's Photo"
                                                         value="{{ old('author_photo_url') }}"
-                                                        required
                                                         aria-describedby="nameHelp">
                                                 </div>
+                                            </div>
+                                            <div class="d-flex justify-content-center">
+                                                <button id=uploadAuthor type="button" class="btn btn-success" style="width:170px">Upload Photo</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                             <div class="d-flex justify-content-center">
                                 <button type="submit" class="btn btn-success">Create</button>
                                 <a href="{{url('/admin/authors/')}}" type="button" class="btn btn-danger">Return</a>
                             </div>
+
                         </form>
                     </div>
                 </div>
@@ -164,6 +169,10 @@
                 }
             }
         });
+
+        document.getElementById('uploadAuthor').onclick = function(e){
+            pondAuthor.processFiles();
+        }
 
         function isLoadingCheck(){
             let isLoading = pondAuthor.getFiles().filter(x=>x.status !== 5).length !== 0;

@@ -14,9 +14,30 @@ class PlanController extends Controller
      */
     public function index()
     {
-        $plans = Plan::orderBy('id', 'asc')->get();
+        $plans = Plan::orderBy('id', 'desc')->paginate(10);
 
-        return view('pages.plans.show', ['plans' => $plans]);
+        return view('pages.plans.index', ['plans' => $plans]);
+    }
+
+    public function indexByIdAsc()
+    {
+        $plans = Plan::orderBy('id', 'asc')->paginate(10);
+
+        return view('pages.plans.index', ['plans' => $plans]);
+    }
+
+    public function indexByNameAtoZ()
+    {
+        $plans = Plan::orderBy('name', 'asc')->paginate(10);
+
+        return view('pages.plans.index', ['plans' => $plans]);
+    }
+
+    public function indexByNameZtoA()
+    {
+        $plans = Plan::orderBy('name', 'desc')->paginate(10);
+
+        return view('pages.plans.index', ['plans' => $plans]);
     }
 
     /**
@@ -37,7 +58,21 @@ class PlanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name'              =>'required',
+            'price'             =>'required|numeric',
+            'duration'          =>'numeric|nullable',
+            'access_level'      =>'required'
+        ]);
+
+        $plan = new Plan();
+        $plan->name              = $request->name;
+        $plan->price             = $request->price;
+        $plan->duration          = $request->duration;
+        $plan->access_level      = $request->access_level;
+        $plan->save();
+
+        return redirect('/admin/plans')->with('status','Product created successfully!');
     }
 
     /**
@@ -48,7 +83,7 @@ class PlanController extends Controller
      */
     public function show(Plan $plan)
     {
-        //
+        return view('pages.plans.show', ['plan' => $plan]);
     }
 
     /**
@@ -71,7 +106,20 @@ class PlanController extends Controller
      */
     public function update(Request $request, Plan $plan)
     {
-        //
+        $this->validate($request, [
+            'name'              =>'required',
+            'price'             =>'required|numeric',
+            'duration'          =>'numeric|nullable',
+            'access_level'      =>'required'
+        ]);
+
+        $plan->name             = $request->name;
+        $plan->price            = $request->price;
+        $plan->duration         = $request->duration;
+        $plan->access_level     = $request->access_level;
+        $plan->save();
+
+        return redirect('/admin/plans')->with('status','Item edited successfully!');
     }
 
     /**
@@ -83,6 +131,6 @@ class PlanController extends Controller
     public function destroy(Plan $plan)
     {
         $plan->delete();
-        return redirect('plans')->with('status','Item deleted successfully!');
+        return redirect('/admin/plans')->with('status','Item deleted successfully!');
     }
 }

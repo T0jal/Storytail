@@ -383,10 +383,10 @@
                                                     autocomplete="video_url"
                                                     placeholder="Youtube URL. Has to be an URL like https://www.youtube.com/embed/..."
                                                     class="form-control @error('read time') is-invalid @enderror"
-                                                    value="@if($book->video){{{$book->video->video_url}}}@else{{{old('new_video_url')}}}@endif"
+                                                    value="@if($book->video){{{$book->video->video_url}}}@else{{{old('video_url')}}}@endif"
                                                     aria-describedby="nameHelp">
                                                 <br>
-                                            @error('new_video_url')
+                                            @error('video_url')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
@@ -431,7 +431,7 @@
 
                         </div>
                         <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-success">Update</button>
+                            <button id="updateButton" type="submit" class="btn btn-success">Update</button>
                             <a href="{{url('admin/books/')}}" type="button" class="btn btn-danger">Return</a>
                         </div>
                     </form>
@@ -442,6 +442,16 @@
 @endsection
 @section('scripts')
     <script>
+
+        //Check read_time type
+        document.getElementById('updateButton').onclick = function(e){
+            let readTimeInput = parseInt(document.getElementById('read_time').value);
+
+            if (!Number.isInteger(readTimeInput))
+            {   event.preventDefault();
+                alert("The value inserted as Read Time has to be a whole number.")
+            }
+        }
 
         //Reload Authors
         document.getElementById('reloadAuthors').onclick = function(e){
@@ -487,6 +497,7 @@
             allowMultiple: false,
             instantUpload: false,
             allowFileSizeValidation: true,
+            allowProcess: false,
             maxFileSize: '5MB',
             labelMaxFileSizeExceeded:'The file you are trying to upload is too big.',
             labelMaxFileSize: 'Maximum file size is {filesize}',
@@ -524,6 +535,7 @@
             allowMultiple:  true,
             instantUpload:  false,
             allowReorder:   true,
+            allowProcess: false,
             allowFileSizeValidation: true,
             maxFileSize: '5MB',
             labelMaxFileSizeExceeded:'The file you are trying to upload is too big.',
@@ -555,13 +567,25 @@
         const inputAudio = document.querySelector('input[id="audio_url"]');
         const pondAudio = FilePond.create( inputAudio, {
             onaddfilestart: (file) => { isLoadingCheckAudio(); },
-            onprocessfile: (files) => { isLoadingCheckAudio(); }
+            onprocessfile: (files) => { isLoadingCheckAudio(); },
+            // onprocessfiles: () => {validateSize();},
+            // onremovefile : (file) => {validateSize();}
         });
+
+        function isLoadingCheckAudio(){
+            let isLoading = pondAudio.getFiles().filter(x=>x.status !== 5).length !== 0;
+            if(isLoading) {
+                $('#updateBook [type="submit"]').attr("disabled", "disabled");
+            } else {
+                $('#updateBook [type="submit"]').removeAttr("disabled");
+            }
+        }
 
         pondAudio.setOptions({
             allowMultiple:  true,
             instantUpload:  false,
             allowReorder:   true,
+            allowProcess: false,
             allowFileSizeValidation: true,
             maxFileSize: '10MB',
             labelMaxFileSizeExceeded:'The file you are trying to upload is too big.',
@@ -575,15 +599,19 @@
         });
 
         document.getElementById('uploadAllAudio').onclick = function(e){
-            pondAudio.processFiles();
+            if(validateSize())
+            {
+                pondAudio.processFiles();
+            }
+            else
+                alert("The number of audio files does not match the number of pages.")
         }
 
-        function isLoadingCheckAudio(){
-            let isLoading = pondAudio.getFiles().filter(x=>x.status !== 5).length !== 0;
-            if(isLoading) {
-                $('#updateBook [type="submit"]').attr("disabled", "disabled");
+        function validateSize(){
+            if(pondAudio.getFiles().length === 0 || pondAudio.getFiles().length === pondPages.getFiles().length){
+                return true;
             } else {
-                $('#updateBook [type="submit"]').removeAttr("disabled");
+                return false;
             }
         }
 

@@ -7,14 +7,13 @@ use Illuminate\Support\Facades\Auth;
 
 class Role {
 
-    public function handle($request, Closure $next, Int $user_type) {
-        if (!Auth::check()) // This isnt necessary, it should be part of your 'auth' middleware
-            return redirect('/home');
+    public function handle($request, Closure $next) {
+        if (!Auth::check()) return redirect('/admin/login');
 
         $user = Auth::user();
-        if($user->user_type_id == $user_type)
+        if($user->user_type_id == 1)
             return $next($request);
 
-        return redirect('/home');
+        return redirect('/');
     }
 }

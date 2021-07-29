@@ -37,6 +37,27 @@ class BookController extends Controller
         return view('pages.books.index', ['books' => $books]);
     }
 
+    public function indexByIdAsc()
+    {
+        $books = Book::withCount('pages')->orderBy('id', 'asc')->paginate(10);
+
+        return view('pages.books.index', ['books' => $books]);
+    }
+
+    public function indexByTitleAtoZ()
+    {
+        $books = Book::withCount('pages')->orderBy('title', 'asc')->paginate(10);
+
+        return view('pages.books.index', ['books' => $books]);
+    }
+
+    public function indexByTitleZtoA()
+    {
+        $books = Book::withCount('pages')->orderBy('title', 'desc')->paginate(10);
+
+        return view('pages.books.index', ['books' => $books]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -44,9 +65,9 @@ class BookController extends Controller
      */
     public function create()
     {
-        $authors = Author::all();
-        $ageGroups = AgeGroup::all();
-        $activities = Activity::all();
+        $authors    = Author::all()->sortBy('last_name');
+        $activities = Activity::all()->sortBy('title');
+        $ageGroups  = AgeGroup::all();
 
         return view('pages.books.create',
             ['authors'=> $authors, 'ageGroups'=> $ageGroups, 'activities'=> $activities]);
@@ -77,7 +98,6 @@ class BookController extends Controller
 
         $book = new Book();
         $book->user_id          = $request->user_id;
-//        $book->user_id          = Auth::id();
         $book->title            = $request->title;
         $book->description      = $request->description;
 
@@ -160,6 +180,15 @@ class BookController extends Controller
             $ActivityBook->save();
         }
 
+        /*
+       ATTACHING THE tags
+       */
+        if($request->tags)
+        {
+            $tags = explode(", ", $request->tags);
+            $book->tag($tags);
+        }
+
         return redirect('/admin/books')->with('status', 'Book created successfully!');
     }
 
@@ -185,7 +214,10 @@ class BookController extends Controller
         else
             $previous = 0;
 
-        return view('pages.books.show', ['book' => $book, 'next'=>$next, 'previous'=> $previous]);
+        $list = $book->tagged;
+        $tags = $list->implode('tag_name',', ');
+
+        return view('pages.books.show', ['book' => $book, 'next'=>$next, 'previous'=> $previous, 'tags' => $tags]);
     }
 
     /**
@@ -196,13 +228,15 @@ class BookController extends Controller
      */
     public function edit(Book $book)
     {
-        $authors = Author::all();
+        $authors = Author::all()->sortBy('last_name');
+        $activities = Activity::all()->sortBy('title');
         $ageGroups = AgeGroup::all();
-        $activities = Activity::all();
         $activityBooks = ActivityBook::all();
+        $list = $book->tagged;
+        $tags = $list->implode('tag_name', ', ');
 
         return view('pages.books.edit',
-            ['book' => $book, 'authors'=> $authors, 'ageGroups'=> $ageGroups, 'activities'=> $activities, 'activityBooks' => $activityBooks]);
+            ['book' => $book, 'authors'=> $authors, 'ageGroups'=> $ageGroups, 'activities'=> $activities, 'activityBooks' => $activityBooks, 'tags' => $tags]);
     }
 
     /**
@@ -217,6 +251,18 @@ class BookController extends Controller
         /*
         UPDATING THE book
         */
+
+        $this->validate($request, [
+//            'user_id'       => 'required',
+            'title'         => 'required',
+            'description'   => 'required',
+//            'cover_url'     => 'required',
+            'read_time'     => 'required',
+            'age_group_id'  => 'required',
+            'is_active'     => 'required',
+            'access_level'  => 'required',
+//            'page_image_url'=> 'required',
+        ]);
 
         $book->title            = $request->title;
         $book->description      = $request->description;
@@ -285,7 +331,7 @@ class BookController extends Controller
                 $page = new Page();
                 $page->book_id          = $book->id;
                 $page->page_image_url   = $page_image_url;
-                if($request->audio_url)
+                if($request->audio_url[0] != null)
                 {
                     $audio                  = $request->audio_url[$audioIndex];
                     $page->audio_url        = $audio;
@@ -298,7 +344,7 @@ class BookController extends Controller
 
                 //Deleting the temporary files
                 File::delete(storage_path($pagesFolderPath . $page_image_url));
-                if($request->audio_url)
+                if($request->audio_url[0] != null)
                 {
                     File::delete(storage_path($audiosFolderPath . $audio));
                 }
@@ -315,19 +361,16 @@ class BookController extends Controller
             $video->delete();
         }
 
-        //If the request brings either the video that was already associated (as the form
-        // is pre-populated if it exists) or it brings a new video, create the video.
-        if($request->new_video_url or $request->video_url)
+        //If the request brings a video, create the video.
+        if($request->video_url)
         {
             $video = new Video();
-            $video->book_id = $book->id;
-            $video->title = $request->title;
-            if($request->new_video_url)
-                $video->video_url = $request->new_video_url;
-            else
-                $video->video_url = $request->video_url;
+            $video->book_id     = $book->id;
+            $video->title       = $request->title;
+            $video->video_url   = $request->video_url;
             $video->save();
         }
+
 //
 //        /*
 //        UPDATING THE activityBook
@@ -353,6 +396,13 @@ class BookController extends Controller
                 $ActivityBook->save();
             }
         }
+
+        /*
+        UPDATING THE tags
+        */
+        $tags = explode(", ", $request->tags);
+        $book->untag();
+        $book->tag($tags);
 
         return redirect('/admin/books')->with('status','Item edited successfully!');
     }

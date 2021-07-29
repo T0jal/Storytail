@@ -13,6 +13,16 @@
                 </div>
 
                 <div class="card-body">
+
+                    <div class="row">
+                        <label class="col-sm-2 col-form-label">{{ __('Cover') }}</label>
+                        <div class="col-sm-7">
+                            <div class="form-group d-flex justify-content-center">
+                                <img class="rounded pr-1 pb-1" src="{{ asset('images/' . $book->cover_url) }}" style="width:200px;"/>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <label class="col-sm-2 col-form-label">{{ __('Title') }}</label>
                         <div class="col-sm-7">
@@ -35,15 +45,6 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                                 @enderror
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <label class="col-sm-2 col-form-label">{{ __('Cover') }}</label>
-                        <div class="col-sm-7">
-                            <div class="form-group d-flex justify-content-center">
-                                <img class="rounded pr-1 pb-1" src="{{ asset('images/' . $book->cover_url) }}" style="width:200px;"/>
                             </div>
                         </div>
                     </div>

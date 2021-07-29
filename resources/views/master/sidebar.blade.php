@@ -6,17 +6,17 @@
   -->
   <div class="logo">
     <a href="{{url('/admin')}}" class="simple-text logo-normal" style="color:orange">
-        <img src="{{asset('images/logo_transparent.png')}}" style="width: 100px" alt="" class="rounded"/>
+        <img src="{{asset('images/baseImages/logo_transparent.png')}}" style="width: 100px" alt="" class="rounded"/>
     </a>
   </div>
   <div class="sidebar-wrapper">
       <ul class="nav">
-          <li class="nav-item{{ $activePage == 'dashboard' ? ' active' : '' }}">
-            <a class="nav-link" href="{{ route('home') }}">
-              <i class="material-icons">dashboard</i>
-                <p>{{ __('Dashboard') }}</p>
-            </a>
-          </li>
+{{--          <li class="nav-item{{ $activePage == 'dashboard' ? ' active' : '' }}">--}}
+{{--            <a class="nav-link" href="{{ route('home') }}">--}}
+{{--              <i class="material-icons">dashboard</i>--}}
+{{--                <p>{{ __('Dashboard') }}</p>--}}
+{{--            </a>--}}
+{{--          </li>--}}
           <li class="nav-item{{ $activePage == 'books' ? ' active' : '' }}">
             <a class="nav-link" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="material-icons">library_books</i>
@@ -47,6 +47,16 @@
                     <a class="nav-link" href="{{ route('addActivity') }}">Add Activity</a>
                 </div>
           </li>
+          <li class="nav-item{{ $activePage == 'users' ? ' active' : '' }}">
+              <a class="nav-link" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="material-icons">person</i>
+                  <p>{{ __('Users') }}</p>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <a class="nav-link" href="{{ route('users') }}">Users' List</a>
+                  <a class="nav-link" href="{{ route('addUser') }}">Add User</a>
+              </div>
+          </li>
           <li class="nav-item{{ $activePage == 'plans' ? ' active' : '' }}">
               <a class="nav-link" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="material-icons">euro</i>
@@ -57,12 +67,6 @@
                   <a class="nav-link" href="{{ route('addPlan') }}">Add Plan</a>
               </div>
           </li>
-{{--        <li class="nav-item{{ $activePage == 'users' ? ' active' : '' }}">--}}
-{{--        <a class="nav-link" href="{{ route('map') }}">--}}
-{{--          <i class="material-icons">library_books</i>--}}
-{{--            <p>{{ __('Users') }}</p>--}}
-{{--        </a>--}}
-{{--      </li>--}}
-    </ul>
+      </ul>
   </div>
 </div>

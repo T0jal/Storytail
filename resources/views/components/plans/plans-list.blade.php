@@ -47,7 +47,11 @@
 
                                         <td> {{ $plan->price . ' €' }} </td>
 
-                                        <td> {{ $plan->duration . ' days' }} </td>
+                                        @if($plan->duration == 0)
+                                            <td></td>
+                                        @else
+                                            <td> {{ $plan->duration . ' days' }} </td>
+                                        @endif
 
                                         @if ($plan->access_level)
                                             <td> Premium </td>

@@ -78,7 +78,7 @@
                                     disabled
                                     id="description"
                                     name="description"
-                                    autocomplete="description"
+                                    autocomplete="Short Bio"
                                     class="form-control @error('description') is-invalid @enderror"
                                     aria-describedby="nameHelp">{{$author->description}}</textarea>
                                 @error('description')
@@ -91,7 +91,7 @@
                     </div>
 
                     <div class="row">
-                        <label class="col-sm-2 col-form-label">{{ __('Nationality') }}</label>
+                        <label class="col-sm-2 col-form-label">{{ __('Country of Origin') }}</label>
                         <div class="col-sm-7">
                             <div class="form-group">
                                 <input
@@ -100,7 +100,7 @@
                                     id="nationality"
                                     name="nationality"
                                     autocomplete="nationality"
-                                    placeholder="nationality"
+                                    placeholder="Country of Origin"
                                     class="form-control @error('read time') is-invalid @enderror"
                                     value="{{ $author->nationality }}"
                                     aria-describedby="nameHelp">
@@ -113,40 +113,32 @@
                         </div>
                     </div>
 
+
                     <div class="row">
                         <label class="col-sm-2 col-form-label">{{ __('Books') }}</label>
                         <div class="col-sm-7">
                             <div class="form-group d-flex justify-content-center">
-                                @foreach($author->books as $book)
-                                    <a href="{{url('admin/books/' . $book->id)}}">
-                                        <img class="rounded pr-1 pb-1" src="{{ asset('images/' . $book->cover_url) }}" style="width:100px;"/>
-                                    </a>
-                                @endforeach
+                                @if(count($author->books) != 0)
+                                    @foreach($author->books as $book)
+                                        <a href="{{url('admin/books/' . $book->id)}}">
+                                            <img class="rounded pr-1 pb-1" src="{{ asset('images/' . $book->cover_url) }}" style="width:100px;"/>
+                                        </a>
+                                    @endforeach
+                                @else
+                                    <input
+                                        type="text"
+                                        disabled
+                                        id="books"
+                                        name="books"
+                                        autocomplete="books"
+                                        placeholder="This author has not been assigned any books."
+                                        class="form-control @error('read time') is-invalid @enderror"
+                                        value="This author has not been assigned any books."
+                                        aria-describedby="nameHelp">
+                                @endif
                             </div>
                         </div>
                     </div>
-
-{{--                    <div class="row">--}}
-{{--                        <label class="col-sm-2 col-form-label">{{ __('Books') }}</label>--}}
-{{--                        <div class="col-sm-7">--}}
-{{--                            <div class="form-group">--}}
-{{--                                <textarea--}}
-{{--                                    type="text"--}}
-{{--                                    rows="4"--}}
-{{--                                    disabled--}}
-{{--                                    id="description"--}}
-{{--                                    name="description"--}}
-{{--                                    autocomplete="description"--}}
-{{--                                    class="form-control @error('description') is-invalid @enderror"--}}
-{{--                                    aria-describedby="nameHelp">@foreach($author->books as $book){{ $loop->first ? '' : ', ' }}{{ $book->title }}@endforeach</textarea>--}}
-{{--                                @error('description')--}}
-{{--                                <span class="invalid-feedback" role="alert">--}}
-{{--                                        <strong>{{ $message }}</strong>--}}
-{{--                                    </span>--}}
-{{--                                @enderror--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
 
                     <div class="row">
                         <label class="col-sm-2 col-form-label">{{ __('Created At') }}</label>

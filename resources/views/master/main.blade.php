@@ -20,11 +20,8 @@
     <!-- CSS Just for demo purpose, don't include it in your project -->
 {{--    <link href="{{ asset('material') }}/demo/demo.css" rel="stylesheet" />--}}
 
-        <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet" />
         <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
         <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
-        <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js"></script>
-        <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
 
     </head>
     <body class="{{ $class ?? '' }}">
@@ -39,8 +36,6 @@
     </div>
 
         <!--   Core JS Files   -->
-
-        <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet" />
 
         <script src="{{ asset('material') }}/js/core/jquery.min.js"></script>
         <script src="{{ asset('material') }}/js/core/popper.min.js"></script>
@@ -89,7 +84,7 @@
 
     <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
     <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
-    <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js"></script>
 
     @yield('scripts')
 

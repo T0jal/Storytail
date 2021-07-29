@@ -18,7 +18,7 @@ class CreateSubscriptionsTable extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('plan_id')->constrained();
             $table->date('start_date');
-            $table->date('end_date');
+            $table->date('end_date')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

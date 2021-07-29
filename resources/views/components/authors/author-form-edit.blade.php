@@ -64,7 +64,7 @@
                                     <div class="row">
                                         <label class="col-sm-2 col-form-label">{{ __('Current Author Photo') }}</label>
                                         <div class="col-sm-7">
-                                            <div class="form-group">
+                                            <div class="form-group d-flex justify-content-center">
                                                 <div>
                                                     <img class="rounded pr-1 pb-1" src="{{ asset('images/' . $author->author_photo_url) }}" style="width:200px;"/>
                                                 </div>
@@ -97,7 +97,7 @@
                                             <div class="form-group">
                                                 <textarea
                                                     type="text"
-                                                    rows="6"
+                                                    rows="4"
                                                     id="description"
                                                     name="description"
                                                     autocomplete="description"
@@ -114,7 +114,7 @@
                                     </div>
 
                                     <div class="row">
-                                        <label class="col-sm-2 col-form-label">{{ __('Nationality') }}</label>
+                                        <label class="col-sm-2 col-form-label">{{ __('Country of Origin') }}</label>
                                         <div class="col-sm-7">
                                             <div class="form-group">
                                             <input
@@ -122,7 +122,7 @@
                                                 id="nationality"
                                                 name="nationality"
                                                 autocomplete="nationality"
-                                                placeholder="nationality"
+                                                placeholder="Exe: Nicaragua, Djibouti, Burkina Faso, Tajikistan,..."
                                                 class="form-control  @error('read time') is-invalid @enderror"
                                                 value="{{ $author->nationality }}"
                                                 required
@@ -135,57 +135,7 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="row">
-                                        <label class="col-sm-2 col-form-label">{{ __('Created At') }}</label>
-                                        <div class="col-sm-7">
-                                            <div class="form-group">
-                                                <input
-                                                    type="text"
-                                                    disabled
-                                                    id="created_at"
-                                                    name="created_at"
-                                                    autocomplete="created_at"
-                                                    placeholder="created_at"
-                                                    class="form-control @error('created at') is-invalid @enderror"
-                                                    value="{{ $author->created_at }}"
-                                                    aria-describedby="nameHelp">
-                                                @error('created_at')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <label class="col-sm-2 col-form-label">{{ __('Updated At') }}</label>
-                                        <div class="col-sm-7">
-                                            <div class="form-group">
-                                                <input
-                                                    type="text"
-                                                    disabled
-                                                    id="updated_at"
-                                                    name="updated_at"
-                                                    autocomplete="updated_at"
-                                                    placeholder="updated_at"
-                                                    class="form-control
-                                        @error('updated at') is-invalid @enderror"
-                                                    value="{{ $author->updated_at }}"
-                                                    required
-                                                    aria-describedby="nameHelp">
-
-                                                @error('updated_at')
-                                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
-
                             </div>
                             <div class="d-flex justify-content-center">
                                 <button type="submit" class="btn btn-success" style="width:150px">Update</button>

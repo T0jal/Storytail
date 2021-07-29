@@ -47,10 +47,11 @@
                                     id="price"
                                     name="price"
                                     autocomplete="price"
+                                    class="form-control @error('price') is-invalid @enderror"
                                     placeholder="Plan's Price"
-                                    class="form-control" value="{{ old('price') }}"
+                                    value="{{ old('price') }}"
                                     aria-describedby="nameHelp">
-                                @error('plan')
+                                @error('price')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -65,7 +66,6 @@
                             <div class="form-group">
                                 <input
                                     type="text"
-                                    required
                                     id="duration"
                                     name="duration"
                                     placeholder="How many days lasts the Plan"
@@ -105,7 +105,7 @@
                 </div>
             </div>
             <div class="d-flex justify-content-center">
-                <button type="submit" class="btn btn-success" style="width:100px">Save</button>
+                <button type="submit" class="btn btn-success" style="width:100px">Create</button>
                 <a href="{{url('admin/plans/')}}" type="button" class="btn btn-danger" style="width:100px">Return</a>
             </div>
           </form>

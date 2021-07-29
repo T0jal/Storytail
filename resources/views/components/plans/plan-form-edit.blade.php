@@ -15,10 +15,11 @@
 
                 <div class="card-body">
                     <div class="row">
-                        <label class="col-sm-2 col-form-label">{{ __('Name') }}</label>
+                        <label class="col-sm-2 col-form-label">{{ __('Name*') }}</label>
                         <div class="col-sm-7">
                             <div class="form-group">
                                 <input
+                                    required
                                     type="text"
                                     id="name"
                                     name="name"
@@ -37,10 +38,11 @@
                     </div>
 
                     <div class="row">
-                        <label class="col-sm-2 col-form-label">{{ __('Price (in euros)') }}</label>
+                        <label class="col-sm-2 col-form-label">{{ __('Price (in euros)*') }}</label>
                         <div class="col-sm-7">
                             <div class="form-group">
                                 <input
+                                    required
                                     type="text"
                                     id="price"
                                     name="price"
@@ -80,7 +82,7 @@
                     </div>
 
                     <div class="row">
-                        <label class="col-sm-2 col-form-label">{{ __('Access Level') }}</label>
+                        <label class="col-sm-2 col-form-label">{{ __('Access Level*') }}</label>
                         <div class="col-sm-7">
                             <div class="form-group">
                                 <select name="access_level" class="form-control">

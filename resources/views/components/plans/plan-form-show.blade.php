@@ -70,7 +70,7 @@
                                     name="duration"
                                     autocomplete="duration"
                                     class="form-control @error('duration') is-invalid @enderror"
-                                    value="{{$plan->duration . ' days'}}"
+                                    value="@if($plan->duration==0){{''}}@else{{$plan->duration . ' days'}}@endif"
                                     aria-describedby="nameHelp">
                                 @error('duration')
                                 <span class="invalid-feedback" role="alert">

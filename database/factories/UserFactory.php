@@ -20,15 +20,14 @@ use Illuminate\Support\Str;
 
 $factory->define(User::class, function (Faker $faker) {
     return [
-        'user_type_id'          => $faker->numberBetween($min = 1, $max = 2),
+        'user_type_id'          => 2,
         'first_name'            => $faker->firstNameMale,
         'last_name'             => $faker->lastName,
         'user_name'             => $faker->unique()->userName,
         'email'                 => $faker->unique()->safeEmail,
         'email_verified_at'     => now(),
-//        'password'              => Hash::make($faker->password),
         'password'              => Hash::make('123456'),
-        'user_photo_url'        => $faker->numberBetween($min = 1, $max = 10).'.jpg',
+        'user_photo_url'        => 'user_'.$faker->numberBetween($min = 1, $max = 10).'.jpg',
         'remember_token'        => Str::random(10),
     ];
 });

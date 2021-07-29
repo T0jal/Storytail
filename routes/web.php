@@ -19,72 +19,107 @@ Route::get('/', function () {
 
 Route::post('upload', [\App\Http\Controllers\FileUploadController::class, 'store']);
 
+Route::get('admin/login', 'LoginController@login');
+Route::post('admin/check', 'LoginController@check');
+Route::get('admin/logout', 'LoginController@logout');
+
 Route::prefix('admin')->group(function() {
 
-    Route::get('/', 'HomeController@index')->name('home');
+    Route::group(['middleware' => 'role'], function () {
 
-    //BOOKS
-    Route::prefix('books')->group(function () {
-        Route::get('', 'BookController@index')->name('books');
-        Route::get('idAsc', 'BookController@indexByIdAsc')->name('booksByIdAsc');
+        Route::get('/', function () {
+            return redirect('admin/books');
+        })->name('home');
 
-        Route::get('titleAtoZ', 'BookController@indexByTitleAtoZ')->name('booksByTitleAtoZ');
-        Route::get('titleZtoA', 'BookController@indexByTitleZtoA')->name('booksByTitleZtoA');
+        //BOOKS
+        Route::prefix('books')->group(function () {
+            Route::get('', 'BookController@index')->name('books');
+            Route::get('idAsc', 'BookController@indexByIdAsc')->name('booksByIdAsc');
 
-        Route::get('create', 'BookController@create')->name('addBook');
-        Route::post('', 'BookController@store');
-        Route::get('{book}', 'BookController@show');
-        Route::get('{book}/edit', 'BookController@edit');
-        Route::put('{book}', 'BookController@update');
-        Route::delete('{book}', 'BookController@destroy');
-    });
+            Route::get('titleAtoZ', 'BookController@indexByTitleAtoZ')->name('booksByTitleAtoZ');
+            Route::get('titleZtoA', 'BookController@indexByTitleZtoA')->name('booksByTitleZtoA');
 
-    //AUTHORS
-    Route::prefix('authors')->group(function () {
-        Route::get('', 'AuthorController@index')->name('authors');
-        Route::get('idAsc', 'AuthorController@indexByIdAsc')->name('authorsByIdAsc');
+            Route::get('create', 'BookController@create')->name('addBook');
+            Route::post('', 'BookController@store');
+            Route::get('{book}', 'BookController@show');
+            Route::get('{book}/edit', 'BookController@edit');
+            Route::put('{book}', 'BookController@update');
+            Route::delete('{book}', 'BookController@destroy');
+        });
 
-        Route::get('nameAtoZ', 'AuthorController@indexByNameAtoZ')->name('authorsByNameAtoZ');
-        Route::get('nameZtoA', 'AuthorController@indexByNameZtoA')->name('authorsByNameZtoA');
+        //AUTHORS
+        Route::prefix('authors')->group(function () {
+            Route::get('', 'AuthorController@index')->name('authors');
+            Route::get('idAsc', 'AuthorController@indexByIdAsc')->name('authorsByIdAsc');
 
-        Route::get('create', 'AuthorController@create')->name('addAuthor');
-        Route::post('', 'AuthorController@store');
-        Route::get('{author}', 'AuthorController@show');
-        Route::get('{author}/edit', 'AuthorController@edit');
-        Route::put('{author}', 'AuthorController@update');
-        Route::delete('{author}', 'AuthorController@destroy');
-    });
+            Route::get('nameAtoZ', 'AuthorController@indexByNameAtoZ')->name('authorsByNameAtoZ');
+            Route::get('nameZtoA', 'AuthorController@indexByNameZtoA')->name('authorsByNameZtoA');
 
-    //ACTIVITIES
-    Route::prefix('activities')->group(function () {
-        Route::get('', 'activityController@index')->name('activities');
-        Route::get('idAsc', 'activityController@indexByIdAsc')->name('activitiesByIdAsc');
+            Route::get('create', 'AuthorController@create')->name('addAuthor');
+            Route::post('', 'AuthorController@store');
+            Route::get('{author}', 'AuthorController@show');
+            Route::get('{author}/edit', 'AuthorController@edit');
+            Route::put('{author}', 'AuthorController@update');
+            Route::delete('{author}', 'AuthorController@destroy');
+        });
 
-        Route::get('titleAtoZ', 'activityController@indexByTitleAtoZ')->name('activitiesByTitleAtoZ');
-        Route::get('titleZtoA', 'activityController@indexByTitleZtoA')->name('activitiesByTitleZtoA');
+        //ACTIVITIES
+        Route::prefix('activities')->group(function () {
+            Route::get('', 'activityController@index')->name('activities');
+            Route::get('idAsc', 'activityController@indexByIdAsc')->name('activitiesByIdAsc');
 
-        Route::get('create', 'activityController@create')->name('addActivity');
-        Route::post('', 'activityController@store');
-        Route::get('{activity}', 'activityController@show');
-        Route::get('{activity}/edit', 'activityController@edit');
-        Route::put('{activity}', 'activityController@update');
-        Route::delete('{activity}', 'activityController@destroy');
-    });
+            Route::get('titleAtoZ', 'activityController@indexByTitleAtoZ')->name('activitiesByTitleAtoZ');
+            Route::get('titleZtoA', 'activityController@indexByTitleZtoA')->name('activitiesByTitleZtoA');
 
-    //PLANS
-    Route::prefix('plans')->group(function () {
-        Route::get('', 'PlanController@index')->name('plans');
-        Route::get('idAsc', 'PlanController@indexByIdAsc')->name('plansByIdAsc');
+            Route::get('create', 'activityController@create')->name('addActivity');
+            Route::post('', 'activityController@store');
+            Route::get('{activity}', 'activityController@show');
+            Route::get('{activity}/edit', 'activityController@edit');
+            Route::put('{activity}', 'activityController@update');
+            Route::delete('{activity}', 'activityController@destroy');
+        });
 
-        Route::get('nameAtoZ', 'PlanController@indexByNameAtoZ')->name('plansByNameAtoZ');
-        Route::get('nameZtoA', 'PlanController@indexByNameZtoA')->name('plansByNameZtoA');
+        //PLANS
+        Route::prefix('plans')->group(function () {
+            Route::get('', 'PlanController@index')->name('plans');
+            Route::get('idAsc', 'PlanController@indexByIdAsc')->name('plansByIdAsc');
 
-        Route::get('create', 'PlanController@create')->name('addPlan');
-        Route::post('', 'PlanController@store');
-        Route::get('{plan}', 'PlanController@show');
-        Route::get('{plan}/edit', 'PlanController@edit');
-        Route::put('{plan}', 'PlanController@update');
-        Route::delete('{plan}', 'PlanController@destroy');
+            Route::get('nameAtoZ', 'PlanController@indexByNameAtoZ')->name('plansByNameAtoZ');
+            Route::get('nameZtoA', 'PlanController@indexByNameZtoA')->name('plansByNameZtoA');
+
+            Route::get('create', 'PlanController@create')->name('addPlan');
+            Route::post('', 'PlanController@store');
+            Route::get('{plan}', 'PlanController@show');
+            Route::get('{plan}/edit', 'PlanController@edit');
+            Route::put('{plan}', 'PlanController@update');
+            Route::delete('{plan}', 'PlanController@destroy');
+        });
+
+        //USERS
+        Route::prefix('users')->group(function () {
+
+            Route::get('', 'UserController@index')->name('users');
+            Route::get('idAsc', 'UserController@indexByIdAsc')->name('usersByIdAsc');
+
+            Route::get('nameAtoZ', 'UserController@indexByNameAtoZ')->name('usersByNameAtoZ');
+            Route::get('nameZtoA', 'UserController@indexByNameZtoA')->name('usersByNameZtoA');
+
+            Route::get('usernameAtoZ', 'UserController@indexByUsernameAtoZ')->name('usersByUsernameAtoZ');
+            Route::get('usernameZtoA', 'UserController@indexByUsernameZtoA')->name('usersByUsernameZtoA');
+
+            Route::get('emailAtoZ', 'UserController@indexByEmailAtoZ')->name('usersByEmailAtoZ');
+            Route::get('emailZtoA', 'UserController@indexByEmailZtoA')->name('usersByEmailZtoA');
+
+            Route::get('userTypeAtoZ', 'UserController@indexByUserTypeAtoZ')->name('usersByUserTypeAtoZ');
+            Route::get('userTypeZtoA', 'UserController@indexByUserTypeZtoA')->name('usersByUserTypeZtoA');
+
+            Route::get('create', 'UserController@create')->name('addUser');
+            Route::post('', 'UserController@store');
+            Route::get('{user}', 'UserController@show');
+            Route::get('{user}/edit', 'UserController@edit');
+            Route::put('{user}', 'UserController@update');
+            Route::delete('{user}', 'UserController@destroy');
+        });
     });
 });
 
